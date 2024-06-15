@@ -1,3 +1,4 @@
+const requestIp = require('request-ip')
 const Publisher = require('../model/publisherModel')
 
 
@@ -61,17 +62,27 @@ const addPublisherAds = async (req, res) => {
 };
 
 const updateAdStats = async (req, res) => {
+    console.log("Working")
     try {
 
+        const clientIp = requestIp.getClientIp(req);
+        console.log("IP Address:", clientIp)
         const publisher = await Publisher.findOne({ _id: req.params.id });
 
         if (!publisher) {
             res.status(409).json({ error: 'Publisher not found' })
         }
 
-        const adIndex = publisher.ads.findIndex(ad => ad.adId.toString() === req.params.adId);
+        const adIndex = publisher.ads.findIndex(ad => ad._id.toString() === req.params.adId);
+        console.log(req.params)
 
-        publisher.ads[adIndex].watchCount += 1
+        const existingUser = publisher.ads[adIndex].stats.findIndex(stat => stat.userIp === clientIp);
+
+        if (existingUser !== -1) publisher.ads[adIndex].stats[existingUser].watchCount += 1
+        else publisher.ads[adIndex].stats.push({
+            userIp: clientIp,
+            watchCount: 1
+        })
 
         await publisher.save()
 
