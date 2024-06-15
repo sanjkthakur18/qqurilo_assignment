@@ -30,7 +30,7 @@ const Campaign = () => {
         try {
             await campaign(formData)
             console.log(campData, file)
-            setCampData({ name: '', category: '', type: '', bidvalue: 0, file: null })
+            // setCampData({ name: '', category: '', type: '', bidvalue: 0, file: null })
             setFile(null)
         } catch (error) {
             setErrorMessage(error.message)
@@ -50,6 +50,16 @@ const Campaign = () => {
                             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                             placeholder="John Doe"
                             name='name' value={campData.name} onChange={handleChange}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-medium mb-2" htmlFor="name">Add URL</label>
+                        <input
+                            required
+                            type="text"
+                            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                            placeholder="https://www.google.com"
+                            name='siteUrl' value={campData.siteUrl} onChange={handleChange}
                         />
                     </div>
                     <div className="mb-4">
