@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 
 const Publisher = () => {
@@ -8,7 +8,8 @@ const Publisher = () => {
 
     const handlePublisher = async () => {
         try {
-            const res = await axios.get(`http://127.0.0.1:4000/api/publisher/666b2776907ea6ba87c65341/get-publisher`)
+            const res = await axios.get(`http://127.0.0.1:4000/api/publisher/666d69e6f2d042b62e17da92/get-publisher`)
+            console.log(res);
             setData(res.data)
         } catch (error) {
             console.log(error)
@@ -19,9 +20,10 @@ const Publisher = () => {
         handlePublisher()
     }, [])
 
-    const handleAddStats = async (adId) => {
+    const handleAddStats = async (e, adId) => {
+        e.preventDefault()
         try {
-            const res = await axios.get(`http://127.0.0.1:4000/api/publisher/666b2776907ea6ba87c65341/update-count/${adId}`)
+            const res = await axios.put(`http://127.0.0.1:4000/api/publisher/666d69e6f2d042b62e17da92/update-count/${adId}`)
             setData(res.data)
         } catch (error) {
             console.log(error)
@@ -32,12 +34,14 @@ const Publisher = () => {
         <div>
             {
                 data?.ads?.map(ad => (
-                    <Link onClick={handleAddStats} to={`${baseUrl}/${ad.siteId}/${ad.zoneId}`} target="_blank" key={ad.id} className="max-w-sm rounded overflow-hidden shadow-lg">
-                        <img src={ad.adId.img[0]} alt={ad.name} className="w-full" />
-                        <div className="px-6 py-4">
-                            <div className="font-bold text-xl mb-2">{ad.name}</div>
-                        </div>
-                    </Link>
+                    <div onClick={() => handleAddStats(ad._id)} key={ad._id} className="w-[50%] text-center h-[100vh] mx-auto rounded overflow-hidden">
+                        <NavLink to={ad.adId.adUrl} target="_blank" >
+                            <img src={ad.adId.img[0]} alt={ad.name} className="w-[50%] mt-10 object-cover overflow-hidden mx-auto rounded-lg shadow-xl" />
+                            <div className="px-6 py-4">
+                                <div className="font-bold text-xl mb-2">{ad.adId.name}</div>
+                            </div>
+                        </NavLink>
+                    </div>
                 ))
             }
         </div>
