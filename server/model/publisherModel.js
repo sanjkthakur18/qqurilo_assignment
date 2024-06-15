@@ -20,12 +20,14 @@ var publisherSchema = new mongoose.Schema({
         siteId: {
             type: String,
         },
-        watchCount: {
-            type: Number,
-            default: 0
-        },
-        userIps: [{
-            type: String
+        stats: [{
+            watchCount: {
+                type: Number,
+                default: 0
+            },
+            userIp: {
+                type: String
+            }
         }]
     }],
     sites: [{
